@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # O Servidor Vulnerável (Alvo)
+  vulnerable-app:
+    build: .
+    ports:
+      - "8080:8000"
+    command: php -S 0.0.0.0:8000 vulnerable.php
+    networks:
+      - lab-net
+
+  # O Scanner (Onde você vai rodar o python)
+  scanner-env:
+    build: .
+    depends_on:
+      - vulnerable-app
+    tty: true
+    stdin_open: true
+    networks:
+      - lab-net
+
+networks:
+  lab-net:
+    driver: bridge
